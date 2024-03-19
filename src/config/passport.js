@@ -28,3 +28,4 @@ const jwtVerify = async (payload, done) => {
 module.exports = {
   // jwtStrategy,
 };
+//jwt토큰 packet 직접 구현할 것인가에 대한 유무
