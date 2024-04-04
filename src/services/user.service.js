@@ -3,15 +3,16 @@ const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * Create a user
+ * Create a users
  * @param {Object} userBody
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  if (await User.isEmailTaken(userBody.email)) {
+  const [userId] = await User.isUserIdTaken(userBody.id);
+  if (userId) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  return User.create(userBody);
+  return await User.create(userBody);
 };
 
 /**
@@ -61,7 +62,7 @@ const updateUserById = async (userId, updateBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
   Object.assign(user, updateBody);
-  await user.save();
+  await User.updateId(user);
   return user;
 };
 
@@ -75,7 +76,7 @@ const deleteUserById = async (userId) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  await user.remove();
+  await User.removeUser(user);
   return user;
 };
 

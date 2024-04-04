@@ -3,9 +3,12 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  const { id, password, name, part } = req.body;
+  const result = await userService.createUser({id, password, name, part});
+  if(result.protocol41 === true) {
+    const tokens = await tokenService.generateAuthTokens(id);
+    res.status(httpStatus.CREATED).send({ id, tokens });
+  }
 });
 
 const login = catchAsync(async (req, res) => {

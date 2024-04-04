@@ -43,6 +43,11 @@ app.options('*', cors());
 app.use(passport.initialize());
 // passport.use('jwt', jwtStrategy);
 
+//server health checking
+app.get('/ping', (req, res) => {
+  res.send({"message" : "pong"})
+});
+
 // limit repeated failed requests to auth endpoints
 if (config.env === 'production') {
   app.use('/v1/auth', authLimiter);
@@ -50,11 +55,6 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
-
-//server health checking
-app.get('/ping', (req, res) => {
-  res.status(httpStatus[200]).json({ message:"pong" })
-});
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

@@ -14,6 +14,15 @@ const envVarsSchema = Joi.object()
     DB_USERNAME: Joi.string().default('root'),
     DB_PASSWORD: Joi.string().required().description('Database Login Password'),
     DB_NAME: Joi.string().required().description('Database Name'),
+    REDIS_HOST: Joi.string().required().description('Redis_URL'),
+    REDIS_PORT:Joi.number().required().description('Redis_Port'),
+    REDIS_USERNAME: Joi.string().default('default'),
+    REDIS_PASSWORD: Joi.string().required().description("Redis_Password"),
+    JWT_SECRET: Joi.string().required().description('JWT secret key'),
+    JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().default(30).description('minutes after which access tokens expire'),
+    JWT_REFRESH_EXPIRATION_DAYS: Joi.number().default(30).description('days after which refresh tokens expire'),
+    JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.number().default(10).description('minutes after which reset password token expires'),
+    JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number().default(10).description('minutes after which verify email token expires'),
   })
   .unknown();
 
@@ -33,6 +42,12 @@ module.exports = {
     username: envVars.DB_USERNAME,
     password: envVars.DB_PASSWORD,
     DB_name: envVars.DB_NAME,
+  },
+  Redis: {
+    host: envVars.REDIS_HOST,
+    port: envVars.REDIS_PORT,
+    username: envVars.REDIS_USERNAME,
+    password: envVars.REDIS_PASSWORD,
   },
   jwt: {
     secret: envVars.JWT_SECRET,
